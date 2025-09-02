@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Attendance Management System</title>
+  <meta name="theme-color" content="#FF5F15" />
+  <link rel="manifest" href="manifest.json">
+
+  <!-- iOS support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      color: #FF5F15;
+      background: url('https://i.ibb.co/G3F697ZG/Free-Universe-Stars-Video-Gif-Animated-Zoom-Virtual-Background.gif') center/cover no-repeat fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: brightness(1.1);
+    }
+    header {
+      text-align: center;
+      padding-top: 40px;
+      text-shadow: 0 0 6px rgba(0,0,0,0.7);
+    }
+    header h1 {
+      font-size: 2.2em;
+      margin: 0;
+    }
+    header h2 {
+      font-size: 1.2em;
+      margin-top: 8px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .glass-btn {
+      width: 80%;
+      max-width: 300px;
+      padding: 14px 0;
+      font-size: 1.1em;
+      color: #FF5F15;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 95, 21, 0.5);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .glass-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    .note {
+      margin: 20px auto;
+      padding: 12px;
+      max-width: 320px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      font-size: 0.9em;
+      border-radius: 8px;
+      text-align: center;
+    }
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 0.85em;
+      color: #FFE0C8;
+      text-shadow: 0 0 4px rgba(0,0,0,0.6);
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .popup-content {
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      padding: 24px;
+      width: 90%;
+      max-width: 320px;
+      text-align: center;
+      color: #333;
+    }
+    .popup-content h3 {
+      margin-top: 0;
+      color: #FF5F15;
+    }
+    .popup-content input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: none;
+    }
+    .popup-content .login-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      background: #FF5F15;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .popup-content .login-btn:hover {
+      background: #e14f10;
+    }
+    .popup-content .close-btn {
+      background: #ccc;
+      color: #333;
+      margin-top: 8px;
+    }
+    .popup-content .error {
+      color: #e61400;
+      margin-top: 8px;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Attendance Management System</h1>
+    <h2>Electro Metal Pressings (Pvt) Ltd.</h2>
+  </header>
+
+  <div class="container">
+    <a href="https://script.google.com/macros/s/AKfycbw9HeSeO5ofutp-xSLvXUYtYA1nHw2Ud18soayQuP0yJDSkX480ZMdiarkt7VOuYzgWRg/exec" class="glass-btn">
+      Employee Login
+    </a>
+    <button class="glass-btn" onclick="openPopup()">Manager Login</button>
+
+    <div class="note">
+      <strong>Note:</strong> Employees should exclusively use the <em>Employee Login</em>. Avoid attempting multiple logins to ensure secure and uninterrupted access.
+    </div>
+  </div>
+
+  <div class="popup" id="loginPopup">
+    <div class="popup-content">
+      <h3>Manager Login</h3>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button class="login-btn" onclick="validateLogin()">Log In</button>
+      <button class="login-btn close-btn" onclick="closePopup()">Cancel</button>
+      <div class="error" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <footer>
+    Electro Metal Private Limited<br>
+    © 2025 EMP (PVT) LTD. All Rights Reserved
+  </footer>
+
+  <script>
+    function openPopup() {
+      document.getElementById('loginPopup').style.display = 'flex';
+    }
+    function closePopup() {
+      document.getElementById('loginPopup').style.display = 'none';
+      document.getElementById('errorMsg').innerText = '';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+    function validateLogin() {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      if (u === 'admin' && p === '12261226') {
+        window.location.href = 'https://docs.google.com/spreadsheets/d/1bJhX1ub9BLnNaOxzz8MHi0PIKGVbwcEx35TG4UurTGI/edit?gid=0#gid=0';
+      } else {
+        document.getElementById('errorMsg').innerText = 'Invalid username or password. Please try again.';
+      }
+    }
+
+    // Register service worker
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js")
+          .then(() => console.log("Service Worker registered"))
+          .catch(err => console.error("SW registration failed:", err));
+      });
+    }
+  </script>
+</body>
+</html>
